@@ -1,0 +1,105 @@
+HW7 - Subroutines 
+
+01.  Given this subroutine.                                              
+                                                                    
+      subr:   push  ax                                              
+              push  si                                              
+              mov   ax,[si]                                         
+              mov   [si],ah                                         
+              mov   [si+1],al                                       
+              pop   ax                                              
+              pop   si                                              
+              ret                                                   
+                                                                    
+A. The ax and si registers are correctly saved and restored.       
+B. The ax and si registers are not correctly saved and restored.   
+
+
+02.  This subroutine is to copy one list to another list. Input is:         
+    si points to the source list and di points to the destination list 
+    cx contains the count of bytes in the source list  
+    
+    subr:   cmp     cx,0        ; is list size zero    
+            je      exit        ; if yes we are done   
+            push    si          ; save si              
+            push    di          ; save di              
+            push    cx          ; save cx              
+    movr:   mov     al,[si]     ; get a byte           
+            mov     [di],al     ; put a byte           
+            loop    movr        ; repeat if more chars 
+    exit:   pop     cx          ; restore cx           
+            pop     di          ; restore di           
+            pop     si          ; restore si           
+            ret                 ; return to caller     
+                                                       
+If cx is not zero then when will the subroutine correctly 
+copy the source list to the destination list              
+A. for all non zero values of cx 
+B. only if cx=0001               
+C. if cx is in the range 0001 to 00FF  (1 to 255) 
+D. if cx is in the range 0001 to 7FFF  (cx appears to be positive) 
+E. if cx is in the range 8000 to FFFF  (cx appears to be negative) 
+
+
+03.  This subroutine increments a byte memory value. The input is   
+si which points to the byte memory value                       
+    
+    subr:   push    ax          ; save ax             
+            mov     al,[si]     ; get the data        
+            inc     al          ; add 1 to the data   
+            mov     [si],al     ; put the data        
+            pop     ax          ; restore ax          
+            ret                 ; return to caller    
+  
+Which of these is true about instruction  mov  al,[si] 
+A. it is syntactically okay and will assemble without errors     
+B. it requires the data size to be specified by entering:        
+   mov  al,[byte ptr si]                                         
+C. it will always generate an assembler error message because al is a byte
+   register and si is a word register                                     
+D. it will assemble correctly only if the assembler has access to the data
+   declaration for list because then the assembler will know the size of  
+   the data items in the list                                             
+E. None of the above                                                      
+
+
+04.  This subroutine has been written to determine if the unsigned             
+word passed to it in ax is odd or even.  The specification is:            
+    Input:  ax = unsigned word                                            
+    Output: ax = 0 if input was even   ax = 1 if input was odd            
+                                                                          
+    oddeven:  mov  ah,2     ; set ah to 2 in preparation for the divide   
+              div  ah       ; divide the low part of the input by 2 and   
+                            ; the remainder in ah can only be 0 or 1      
+              mov  al,ah    ; mov remainder to al (1=odd  0=even)         
+              mov  ah,0     ; clear ah                                    
+              ret           ; return                                      
+                                                                          
+Which statement is true about the subroutine                              
+A. For all input values of ax it returns the correct output               
+B. It never returns the correct output                                    
+C. It returns the correct output only for inputs in the range 0 to 127    
+D. It always returns ax set to 0                                          
+E. It always returns ax set to 1                                          
+
+
+05.  Given this subroutine.                                              
+                                                                    
+      subr:   push  ax                                              
+              push  si                                              
+              mov   ax,[si]                                         
+              mov   [si],ah                                         
+              mov   [si+1],al                                       
+              pop   si                                              
+              pop   ax                                              
+              ret                                                   
+                                                                    
+A. The subroutine saves and restores ax and si,                     
+   both of which are modified by the subroutine.                    
+B. The subroutine saves and restores the si register,               
+   even though the si register is not modified.                     
+
+
+CODE=EIJBK       
+End of file
+-

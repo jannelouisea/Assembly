@@ -1,0 +1,23 @@
+;----------------------------------------
+; read in characters from the Standard Input
+;----------------------------------------
+getchars:				;
+	mov		ah,8		; set ah = 8 to request a character
+					; w/out echo
+	int		21h		; call DOS and the character will be
+					; returned in al
+;----------------------------------------
+; only move valid char into dl
+; print out valid character
+;----------------------------------------
+	mov		dl,al		; move char stored in al from input
+					; call to the data register to print
+					; out
+	mov		ah,2		; set ah=2 to request a character to
+					; be written
+	int		21h		; call DOS and the character will be
+					; written
+	cmp		al,'.'		; was the character a period
+	jne		getchars	; if the character was not a period
+					; get the next character and repeat the
+					; process

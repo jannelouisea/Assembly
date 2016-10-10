@@ -1,0 +1,145 @@
+Microsoft (R) Macro Assembler Version 6.11		    09/21/16 13:17:13
+key.asm							     Page 1 - 1
+
+
+				;-----------------------------------------------------------------
+				;   program:    KEY *MASM* version
+				;
+				;   function:   Reads printable characters (20h-7Fh) from the Standard Input
+				;               (keyboard or a redirected ASCII text file) without echo 
+				;               (using ah=08h and int 21h). The characters are processed one
+				;               at a time, immediately, as the are read the program will
+				;               if the character is transformed and/or printed to standard
+				;               output. The program ends when the user enters a period.
+				;		The only characters that will be printed onto the screen are
+				;		alphabetical chars, a blank space, and a period. In addition to
+				; 		print nay uppercase letter, if a lowercase letter is inputed then
+				;		the character will be set to print out its uppercase.
+				;
+				;   input:	The program is initialized by typing in 'KEY' into the commaned line.
+				;		Fromt then the user enters data by preseeing any key on the keyboard.
+				;		As long as the user has not specified a period the program will keep
+				;		on running.
+				;
+				;   owner:      Janne Louise Ave (jfave)
+				;
+				;   date:       09/21/16
+				;
+				;   09/19/16    First lines written
+				;   09/21/16	Added more information to the header
+				;------------------------------------------------
+					.model	small				; 64k code and 64k data
+				      	.8086					; only allow 8086 instructions
+				      	.stack	256				; reserve 256 bytes for the stack
+				;------------------------------------------------
+ 0000				      	.data					; start the data segment
+				;------------------------------------------------
+				; Translate-table
+				; tran is a table with 256 entries (0 - 255)
+				; Whatever ASCII char the user entered will be translated into a different char
+				; based on the table
+				; Any char translated to '*' will not be printed out by the program
+				;------------------------------------------------
+ 0000  0020 [			tran	db	32	dup	('*')		; for ASCII chars (0 - 31) = '*'
+        2A
+       ]
+ 0020  20				db	' '				; set 32 = ' '
+ 0021  000D [				db	13	dup	('*')		; for ASCII chars (33 - 45) = '*'	
+        2A
+       ]
+ 002E  2E				db	'.'				; set 46 = '.'
+ 002F  0012 [				db      18	dup	('*')		; set ASCII chars (47 - 64) = '*'	
+        2A
+       ]
+ 0041  41 42 43 44 45 46		db	'ABCDEFGHIJKLMNOPQRSTUVWXYZ'	; chars 65 - 90 = letters (A - Z)
+       47 48 49 4A 4B 4C
+       4D 4E 4F 50 51 52
+       53 54 55 56 57 58
+       59 5A
+ 005B  0006 [				db	6	dup	('*')		; for ASCII chars (91 - 96) = '*'
+        2A
+       ]
+ 0061  41 42 43 44 45 46		db	'ABCDEFGHIJKLMNOPQRSTUVWXYZ'	; chars 97 - 122 = letters (A - Z)
+       47 48 49 4A 4B 4C
+       4D 4E 4F 50 51 52
+       53 54 55 56 57 58
+       59 5A
+ 007B  0085 [				db 	133	dup	('*')		; for ASCII chars (123 - 255) = '*'
+        2A
+       ]
+				;------------------------------------------------
+ 0000					.code					; 
+				;-----------------------------------------------
+				; Initialize program execution
+				;----------------------------------------
+ 0000				start:					;
+ 0000  B8 ---- R			mov	ax,@data		; establish addressability to the 
+ 0003  8E D8				mov	ds,ax			; data segment for this program
+ 0005  BB 0000 R			mov 	bx,offset tran		; bx points to the table
+				;----------------------------------------
+				; Read in characters from the Standard Input
+				;----------------------------------------
+ 0008				getchars:				;
+ 0008  B4 08				mov		ah,8		; set ah = 8 to request a character
+									; w/out echo
+ 000A  CD 21				int		21h		; call DOS and the character will be
+									; returned in al
+ 000C  D7				xlat				; translate the char
+ 000D  3C 2A				cmp 	al,'*'			; if the char is translated to a '*'
+ 000F  74 F7				je	getchars		; yes, char will not get printed out
+				;----------------------------------------
+ 0011  8A D0				mov		dl,al		; move char stored in al from input
+									; call to the data register for printing
+ 0013  B4 02				mov		ah,2		; set ah=2 to request a character to
+									; be written
+ 0015  CD 21				int		21h		; call DOS and the character will be
+									; written
+ 0017  3C 2E				cmp		al,'.'		; was the character a period
+ 0019  75 ED				jne		getchars	; if the character was not a period
+									; get the next character and repeat the
+									; process
+				;----------------------------------------
+				; terminate program execution
+				;----------------------------------------
+ 001B				exit:					;
+ 001B  B8 4C00			         mov		ax,4c00h	; set correct exit code in ax
+ 001E  CD 21			         int       	21h		; int 21h will terminate program
+				         end       	start		; execution begins at the label start
+				;----------------------------------------
+
+Microsoft (R) Macro Assembler Version 6.11		    09/21/16 13:17:13
+key.asm							     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0100	  Word	  Public  'DATA'	
+STACK  . . . . . . . . . . . . .	16 Bit	 0100	  Para	  Stack	  'STACK'	 
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0020	  Word	  Public  'CODE'	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0000h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+exit . . . . . . . . . . . . . .	L Near	 001B	  _TEXT	
+getchars . . . . . . . . . . . .	L Near	 0008	  _TEXT	
+start  . . . . . . . . . . . . .	L Near	 0000	  _TEXT	
+tran . . . . . . . . . . . . . .	Byte	 0000	  _DATA	
+
+	   0 Warnings
+	   0 Errors

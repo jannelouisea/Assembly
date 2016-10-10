@@ -1,0 +1,122 @@
+HW5 - Multiply and Divide 
+
+01. Given these hex values for the 8086 registers 
+    AX=BE11  BX=0994  CX=D007  DX=BBC0
+    What are the hex values in DX and AX after executing this instruction:
+
+    mul  cl 
+
+02. Was the Carry Flag set to 0 or 1 ? 
+
+03. Given these hex values for the 8086 registers 
+    AX=C10D  BX=4374  CX=17E9  DX=B053
+    What are the hex values in DX and AX after executing this instruction:
+
+    mul  ch 
+
+04. Was the Carry Flag set to 0 or 1 ? 
+
+05. Given these hex values for the 8086 registers 
+    AX=34FC  BX=01B6  CX=E0E0  DX=99AC
+    What are the hex values in DX and AX after executing this instruction:
+
+    imul  bh 
+
+06. Was the Carry Flag set to 0 or 1 ? 
+
+07. Given these hex values for the 8086 registers 
+    AX=6804  BX=99E0  CX=3D5C  DX=E8FA
+    What are the hex values in DX and AX after executing this instruction:
+
+    imul  bl 
+
+08. Was the Carry Flag set to 0 or 1 ? 
+
+09. Given these hex values for the 8086 registers 
+    AX=0790  BX=34A8  CX=0016  DX=B611
+    What are the hex values in DX and AX after executing this instruction:
+
+    mul  cx 
+
+10. Was the Carry Flag set to 0 or 1 ? 
+
+11. Given these hex values for the 8086 registers 
+    AX=5E10  BX=268E  CX=0100  DX=BA1B
+    What are the hex values in DX and AX after executing this instruction:
+
+    mul  cx 
+
+12. Was the Carry Flag set to 0 or 1 ? 
+
+13. Given these hex values for the 8086 registers 
+    AX=016E  BX=FFFC  CX=5750  DX=F9F4
+    What are the hex values in DX and AX after executing this instruction:
+
+    imul  bx 
+
+14. Was the Carry Flag set to 0 or 1 ? 
+
+15. Given these hex values for the 8086 registers 
+    AX=8CD6  BX=0100  CX=12FC  DX=6816
+    What are the hex values in DX and AX after executing this instruction:
+
+    imul  bx 
+
+16. Was the Carry Flag set to 0 or 1 ? 
+
+17. Given these hex values for the 8086 registers 
+    AX=0029  BX=DFF0  CX=3109  DX=058B
+    What are the hex values in DX and AX after executing this instruction:
+
+    div  cl 
+
+18. Given these hex values for the 8086 registers 
+    AX=0025  BX=D43C  CX=0001  DX=0000
+    What are the hex values in DX and AX after executing this instruction:
+
+    div  cx 
+
+19. Given these hex values for the 8086 registers 
+    AX=001C  BX=FFF9  CX=F4AD  DX=C46B
+    What are the hex values in DX and AX after executing this instruction:
+
+    idiv  bl 
+
+20. Given these hex values for the 8086 registers 
+    AX=FFF8  BX=0043  CX=044B  DX=618A
+    What are the hex values in DX and AX after executing this instruction:
+
+    idiv  bl 
+
+21. Given these hex values for the 8086 registers 
+    AX=FFF9  BX=FFFD  CX=DF5E  DX=1BE5
+    What are the hex values in DX and AX after executing this instruction:
+
+    idiv  bl 
+
+22. Given these hex values for the 8086 registers 
+    AX=FFCE  BX=0006  CX=743A  DX=FFFF
+    What are the hex values in DX and AX after executing this instruction:
+
+    idiv  bx 
+
+23. Given these hex values for the 8086 registers 
+    AX=9B8D  BX=E7F3  CX=A433  DX=973C
+    Will this instruction cause a divide overflow? 
+
+    div  ch 
+
+24. Given these hex values for the 8086 registers 
+    AX=CDCB  BX=2BAE  CX=2E12  DX=177E
+    Will this instruction cause a divide overflow? 
+
+    div  cx 
+
+25. Given these hex values for the 8086 registers 
+    AX=9831  BX=1DF4  CX=B2AB  DX=131F
+    Will this instruction cause a divide overflow? 
+
+    idiv  ch 
+
+End of file
+-
