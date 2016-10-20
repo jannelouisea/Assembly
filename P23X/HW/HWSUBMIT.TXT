@@ -1,13 +1,13 @@
-CSC23x:  Homework Grades    (code=5-85685-1) Ver 580110
+CSC23x:  Homework Grades    (code=6-78775-4) Ver 580110
 Student:                  Ave,                Janne 
-Created: 09/27/16 Updated:  10/11 15:28:30  
+Created: 09/27/16 Updated:  10/20 08:47:48  
 
 HW#  Started        Status         Grade
 HW5  09/29/16       D 09/29 11:53  084               
 HW6  10/09/16       D 10/09 23:49  100               
 HW7  10/11/16       D 10/11 15:28  100               
-HW8                                000               
-VER=I045051C1L0E10K0A0A0C8:1:80 D121400V00/01000000438
+HW8  10/20/16       D 10/20 08:47  100               
+VER=I846081H0V0G10O1Y0B0H8:1:71 L142500V00/00000000448
 
 End of file     
 -
@@ -442,5 +442,17 @@ End of file
 -
 
 
-**********  NO HW8.ANS  **********
+**********   HW8.ANS   **********
 
+ 1:8B0E0010
+ 2:80C364
+ 3:2BD9
+ 4:81FBE803
+ 5:C6060020FF
+ 6:div
+ 7:byte
+ 8:bh
+ 9:ja
+10:3
+End of file
+-
