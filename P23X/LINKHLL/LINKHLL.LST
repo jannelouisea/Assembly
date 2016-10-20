@@ -1,0 +1,134 @@
+Microsoft (R) Macro Assembler Version 6.11		    10/20/16 14:36:20
+LINKHLL.ASM						     Page 1 - 1
+
+
+				;-----------------------------------------------------------
+				; Program:   linkhll subroutine
+				;
+				; Function:  Determines the product of the two largest 
+				;	     unsigned word values out of the 4 passed into 
+				;	     the subroutine through the stack
+				;
+				; Input:     4 unsigned word value passed to the subroutine
+				;	     through the stack
+				;
+				; Output:    the product will be stored in the dx:ax registers
+				;
+				; Owner:     Janne Louise Ave (jfave)
+				;
+				; Date:      	Update Reason
+				; --------------------------
+				; 10/20/2016 	Original version
+				;----------------------------------------
+					.model	small			; 64k code and 64k data
+					.8086                         	; only allow 8086 instructions
+					public	_linkhll            	; allow external programs to call subroutine
+				;----------------------------------------
+ 0000					.data               	  	; start the data segment
+				;----------------------------------------
+ 0000				        .code               		; start the code segment
+				;----------------------------------------
+ 0000				_linkhll:				;
+ 0000  55				push	bp			; save the caller's bp
+ 0001  8B EC				mov	bp,sp			; init bp to we have access to the parameters
+									; passed through the subroutine through the stack
+				;----------------------------------------
+				; Overall logic:
+				;	ax -> contains the 1st largest value
+				;	dx -> contains the 2nd largest value
+				;
+				;	For each parameter, it will be compared
+				;	ax first. If a parameter is greater than
+				;	the value in ax it will also be greater than
+				;	the value in dx. Then the value will stored
+				;	in the ax register.
+				;
+				;	If the parameter, is not greater than the
+				;	value in ax, it must be compared against
+				;	the value in dx. If the parameter is greater
+				;	than the value in dx, then it is stored in dx.
+				;
+				;	** LUV -> Largest Unsigned Value **
+				;----------------------------------------
+				; First compare v1 ([bp + 4])and v2 ([bp + 6])
+				;----------------------------------------
+ 0003  8B 46 04				mov	ax,[bp + 4]		; v1 is 1st LUV
+ 0006  8B 56 06				mov	dx,[bp + 6]		; v2 is 2nd LUV
+ 0009  3B C2				cmp	ax,dx			; compare v1 and v2
+ 000B  72 02				jb	setup2			; v2 > v1
+ 000D  EB 06				jmp	check_v3_ax		; check v3
+				;----------------------------------------
+ 000F				setup2:
+ 000F  8B 46 06				mov	ax,[bp + 6]		; v2 is 1st LUV
+ 0012  8B 56 04				mov	dx,[bp + 4]		; v1 is 2nd LUV
+				;----------------------------------------
+ 0015				check_v3_ax:
+ 0015  39 46 08				cmp	word ptr [bp + 8],ax	; compare v3 and 1st LUV
+ 0018  72 07				jb	check_v3_dx		; v3 < 1st LUV (ax) so check if v3 > 2nd LUV (dx) 
+ 001A  8B D0				mov	dx,ax			; last 1st LUV now is the 2nd LUV
+ 001C  8B 46 08				mov	ax,[bp + 8]		; v3 >= 1st LUV so v3 becomes 1st LUV 
+ 001F  EB 08				jmp	check_v4_ax		; check v4
+				;----------------------------------------
+ 0021				check_v3_dx:
+ 0021  39 56 08				cmp	word ptr [bp + 8],dx	; compare v3 and 2nd LUV
+ 0024  72 03				jb	check_v4_ax		; v3 < 2nd LUV (ax) so check v4 
+ 0026  8B 56 08				mov	dx,[bp + 8]		; v3 >= 1st LUV so v3 becomes 2nd LUV 
+				;----------------------------------------
+ 0029				check_v4_ax:
+ 0029  39 46 0A				cmp	word ptr [bp + 10],ax	; compare v4 and 1st LUV
+ 002C  72 07				jb	check_v4_dx		; v4 < 1st LUV (ax) so check if v4 > 2nd LUV (dx) 
+ 002E  8B D0				mov	dx,ax			; last 1st LUV now is the 2nd LUV
+ 0030  8B 46 0A				mov	ax,[bp + 10]		; v4 >= 1st LUV so v4 becomes 1st LUV 
+ 0033  EB 08				jmp	multiply		; finished comparing all values so find product
+				;----------------------------------------
+ 0035				check_v4_dx:
+ 0035  39 56 0A				cmp	word ptr [bp + 10],dx	; compare v4 and 2nd LUV
+ 0038  72 03				jb	multiply		; finished comparing all values so find product
+ 003A  8B 56 0A				mov	dx,[bp + 10]		; v4 >= 2nd LUV so v4 becomes 2nd LUV 
+				;----------------------------------------
+ 003D				multiply:
+ 003D  F7 E2				mul	dx			; multiply the value in ax and dx
+									; product will be stored in ax and dx registers
+ 003F  5D				pop	bp			; restore bp
+ 0040  C3			        ret				; return
+					end				; end of source code
+				;---------------------------------------
+
+Microsoft (R) Macro Assembler Version 6.11		    10/20/16 14:36:20
+LINKHLL.ASM						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0000	  Word	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0041	  Word	  Public  'CODE'	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0000h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+_linkhll . . . . . . . . . . . .	L Near	 0000	  _TEXT	Public
+check_v3_ax  . . . . . . . . . .	L Near	 0015	  _TEXT	
+check_v3_dx  . . . . . . . . . .	L Near	 0021	  _TEXT	
+check_v4_ax  . . . . . . . . . .	L Near	 0029	  _TEXT	
+check_v4_dx  . . . . . . . . . .	L Near	 0035	  _TEXT	
+multiply . . . . . . . . . . . .	L Near	 003D	  _TEXT	
+setup2 . . . . . . . . . . . . .	L Near	 000F	  _TEXT	
+
+	   0 Warnings
+	   0 Errors
